@@ -11,7 +11,12 @@ def find_summary_length(map_to_compute, result_arr, index, thread_n):
     result_arr[index] = el_sum
 
 
-with open("classical.json", "r", encoding="utf-8") as file:
-    threads_num = 8
+def main():
+    with open("classical.json", "r", encoding="utf-8") as file:
+        threads_num = 8
 
-    values = json.load(file)
+        values = json.load(file)
+
+
+if __name__ == '__main__':
+    main()
