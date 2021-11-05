@@ -21,6 +21,12 @@ def main():
         shared_array = Array('d', threads_num)
         processes = [None] * threads_num
 
+        sum_to_check = 0
+        for key in values:
+            sum_to_check = sum_to_check + values[key]['meta']['track']['duration']
+
+        print(sum_to_check)
+
         for i in range(threads_num):
             processes[i] = Process(target=find_summary_length, args=(values, shared_array, i, threads_num))
             processes[i].start()
