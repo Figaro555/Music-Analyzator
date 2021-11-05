@@ -1,4 +1,5 @@
 import json
+from multiprocessing import Process, Array
 
 
 def find_summary_length(map_to_compute, result_arr, index, thread_n):
@@ -16,6 +17,18 @@ def main():
         threads_num = 8
 
         values = json.load(file)
+
+        shared_array = Array('d', threads_num)
+        processes = [None] * threads_num
+
+        for i in range(threads_num):
+            processes[i] = Process(target=find_summary_length, args=(values, shared_array, i, threads_num))
+            processes[i].start()
+
+        for i in range(threads_num):
+            processes[i].join()
+
+        print(sum(shared_array))
 
 
 if __name__ == '__main__':
