@@ -1,4 +1,5 @@
 import json
+from threading import Thread
 
 
 def find_summary_length(map_to_compute, result_arr, index, thread_n):
@@ -16,6 +17,18 @@ def main():
         threads_num = 8
 
         values = json.load(file)
+
+        result = [None] * threads_num
+        threads = [None] * threads_num
+
+        for i in range(threads_num):
+            threads[i] = Thread(target=find_summary_length, args=(values, result, i, threads_num))
+            threads[i].start()
+
+        for i in range(threads_num):
+            threads[i].join()
+
+        print(sum(result))
 
 
 if __name__ == '__main__':
