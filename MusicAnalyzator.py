@@ -21,6 +21,12 @@ def main():
         result = [None] * threads_num
         threads = [None] * threads_num
 
+        sum_to_check = 0
+        for key in values:
+            sum_to_check = sum_to_check + values[key]['meta']['track']['duration']
+
+        print(sum_to_check)
+
         for i in range(threads_num):
             threads[i] = Thread(target=find_summary_length, args=(values, result, i, threads_num))
             threads[i].start()
