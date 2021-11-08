@@ -2,11 +2,11 @@ import json
 from threading import Thread
 
 
-def find_summary_length(map_to_compute, result_arr, index):
+def find_summary_length(map_to_compute):
     el_sum = 0
     for key in map_to_compute:
         el_sum = el_sum + map_to_compute[key]['meta']['track']['duration']
-    result_arr[index] = el_sum
+    return el_sum
 
 
 def main():
