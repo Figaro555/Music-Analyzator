@@ -1,5 +1,5 @@
 import json
-from threading import Thread
+from concurrent.futures import ThreadPoolExecutor
 
 
 def find_summary_length(map_to_compute):
@@ -10,13 +10,12 @@ def find_summary_length(map_to_compute):
 
 
 def main():
-    with open("classical.json", "r", encoding="utf-8") as file:
+    with open("classical.json", "r", encoding="utf-8") as file, ThreadPoolExecutor() as executor:
         threads_num = 8
 
         values = json.load(file)
 
-        result = [None] * threads_num
-        threads = [None] * threads_num
+        features = [None] * threads_num
 
         sum_to_check = 0
         for key in values:
@@ -24,18 +23,19 @@ def main():
 
         print(sum_to_check)
 
+        total_length = 0
+
         for i in range(threads_num):
             start_index = round(len(values) / threads_num * i)
             end_index = round(len(values) / threads_num * (i + 1))
-            d1 = dict(list(values.items())[start_index:end_index])
+            dictionary_part = dict(list(values.items())[start_index:end_index])
 
-            threads[i] = Thread(target=find_summary_length, args=(d1, result, i))
-            threads[i].start()
+            features[i] = executor.submit(find_summary_length, dictionary_part)
 
         for i in range(threads_num):
-            threads[i].join()
+            total_length += features[i].result()
 
-        print(sum(result))
+        print(total_length)
 
 
 if __name__ == '__main__':
